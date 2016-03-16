@@ -1,1 +1,0 @@
-Insert into users VALUES (1, 'daniel', md5('ola'), 1);
