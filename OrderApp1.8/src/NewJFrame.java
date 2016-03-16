@@ -2,20 +2,18 @@
 import java.sql.*;
 import java.util.Calendar;
 
-/******************************************************************************
-* File:NewJFrame.java
-* Course: 17655
-* Project: Assignment 2
-* Copyright: Copyright (c) 2009 Carnegie Mellon University
-* Versions:
-*	1.0 November 2009 - Initial rewrite of original assignment 2 (ajl).
-*
-* This class defines a GUI application that allows EEP order takers to enter
-* phone orders into the database. 
-*
-******************************************************************************/
-
 /**
+ * File:NewJFrame.java
+ * Course: 17655
+ * Project: Assignment 2
+ * Copyright: Copyright (c) 2009 Carnegie Mellon University
+ * Versions:
+ *	1.0 November 2009 - Initial rewrite of original assignment 2 (ajl).
+ *
+ * This class defines a GUI application that allows EEP order takers to enter
+ * phone orders into the database. 
+ *
+ *
  *
  * @author lattanze
  */
@@ -23,7 +21,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     String versionID = "v2.10.10";
 
-    /** Creates new form NewJFrame */
+    /* Creates new form NewJFrame */
     public NewJFrame() {
         initComponents();
         jLabel1.setText("Order Management Application " + versionID);
@@ -839,14 +837,14 @@ public class NewJFrame extends javax.swing.JFrame {
 
     /**
     * @param args the command line arguments
-    */
+    
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NewJFrame().setVisible(true);
+                //new NewJFrame().setVisible(true);
             }
         });
-    }
+    }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
