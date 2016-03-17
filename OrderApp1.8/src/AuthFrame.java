@@ -1,7 +1,9 @@
 
 import java.awt.event.WindowEvent;
 import java.security.MessageDigest;
-import java.sql.*;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -114,98 +116,31 @@ public class AuthFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // Sign In button action
-        
-        // Database parameters
-        Boolean connectError = false;       // Error flag
-        Connection DBConn = null;           // MySQL connection handle
-        String errString = null;            // String for displaying errors
-        String msgString = null;            // String for displaying non-error messages
-        ResultSet res = null;               // SQL query result set pointer
-        Statement s = null;                 // SQL statement pointer
-        
-        // Connect to the inventory database
-        try
-        {
-            msgString = ">> Establishing Driver...";
-            jTextArea1.setText("\n"+msgString);
-
-            //load JDBC driver class for MySQL
-            Class.forName( "com.mysql.jdbc.Driver" );
-
-            msgString = ">> Setting up URL...";
-            jTextArea1.append("\n"+msgString);
-
-            //define the data source
-            String SQLServerIP = "localhost";
-            String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
-
-            msgString = ">> Establishing connection with: " + sourceURL + "...";
-            jTextArea1.append("\n"+msgString);
-
-            //create a connection to the db - note the default account is "remote"
-            //and the password is "remote_pass" - you will have to set this
-            //account up in your database
-
-            DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
-
-        } catch (Exception e) {
-
-            errString =  "\nProblem connecting to database:: " + e;
-            jTextArea1.append(errString);
-            connectError = true;
-
-        } // end try-catch
-
-        // If we are connected, then we get the list of trees from the
-        // inventory database
-        
-        if ( !connectError )
-        {
-            try
+        try {
+            String p = new String(jPasswordField1.getPassword());
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(p.getBytes());
+            byte byteData[] = md.digest();
+            //convert the byte to hex format
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < byteData.length; i++) {
+                sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            Authentication a = new Authentication();
+            Boolean b = a.auth(jTextField1.getText(), sb.toString());
+            
+            if(b==true)
             {
-                s = DBConn.createStatement();
-                res = s.executeQuery( "Select * from users" );
-
-                //Display the data in the textarea
-                
-                jTextArea1.setText("");
-
-                while (res.next())
-                {
-                    msgString = res.getString(1) + " : " + res.getString(2) +
-                            " : "+ res.getString(3) + " : " + res.getString(4);
-                    jTextArea1.append(msgString+"\n");
-                    
-                    if(res.getString(2).equals(jTextField1.getText()))
-                    {
-                        jTextArea1.append("User correct " + res.getString(2)+"\n");
-                        String p = new String(jPasswordField1.getPassword());
-                        MessageDigest md = MessageDigest.getInstance("MD5");
-                        md.update(p.getBytes());
-                        byte byteData[] = md.digest();
-                        //convert the byte to hex format
-                        StringBuffer sb = new StringBuffer();
-                        for (int i = 0; i < byteData.length; i++) {
-                            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-                        }
-                        if(res.getString(3).equals(sb.toString()))
-                        {
-                            jTextArea1.append("Password correct "+ p + " : "+sb.toString()+"\n");
-                            this.setVisible(false);
-                            //this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-                            new NewJFrame().setVisible(true);
-                        }
-                    }
-                } // while
-                
-            } catch (Exception e) {
-
-                errString =  "\nProblem getting tree inventory:: " + e;
-                jTextArea1.append(errString);
-
-            } // end try-catch
-        } // if connect check
-        
+                //jTextArea1.append("Password correct "+ p + " : "+sb.toString()+"\n");
+                this.setVisible(false);
+                new NewJFrame(jTextField1.getText()).setVisible(true);
+            } else {
+                jTextArea1.append("User or Password is incorrect. Try Again\n");
+                //jTextArea1.append("Password incorrect "+ p + " : "+sb.toString()+"\n");
+            }
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(AuthFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
