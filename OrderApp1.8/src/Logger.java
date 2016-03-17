@@ -1,3 +1,10 @@
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,17 +17,39 @@
  */
 public class Logger {
     
-    private String filepathLogin;
-    private String filepathOps;
-    private String filepathShip;
+    private File filepathLogin;
+    private File filepathOrder;
+    private File filepathShip;
     
-    
-    public Logger(String filepath){
+    public Logger(String filepathLogin, String filepathOrder, String filepathShip){
+        this.filepathLogin = new File(filepathLogin);
+        this.filepathOrder = new File(filepathOrder);
+        this.filepathShip = new File(filepathShip);
     }
     
-    public Logger(String filepathLogin, String filepathOps, String filepathShip){
-        this.filepathLogin = filepathLogin;
-        this.filepathOps = filepathOps;
-        this.filepathShip = filepathShip;
+    public void logLogin(String username){
+        boolean res = false;
+        try{
+            FileWriter fw = new FileWriter(filepathLogin, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.append("[Login] User \'"+username+"\' logged in.\n");
+            bw.close();
+            fw.close();
+        } catch (IOException ex) { 
+            java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void logOrder(String username, String orderID, String timestamp){
+        boolean res = false;
+        try{
+            FileWriter fw = new FileWriter(filepathOrder, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.append("[Order "+orderID+"] "+timestamp+": User \'"+username+"\' added order.\n");
+            bw.close();
+            fw.close();
+        } catch (IOException ex) { 
+            java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
