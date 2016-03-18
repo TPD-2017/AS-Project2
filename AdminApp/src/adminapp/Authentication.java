@@ -1,3 +1,4 @@
+package adminapp;
 
 import java.sql.*;
 
@@ -47,7 +48,7 @@ public class Authentication {
                 s = DBConn.createStatement();
                 res = s.executeQuery("Select * FROM users WHERE username='"+user+"' AND password='"+pass+"';");
                 res.next();
-                //System.out.println(res.getString("username"));
+                //System.out.println(res.getString("username")+" : "+res.getString("password"));
                 if(user.equals(res.getString("username")) && pass.equals(res.getString("password")))
                 {
                     //System.out.println("User authenticated");

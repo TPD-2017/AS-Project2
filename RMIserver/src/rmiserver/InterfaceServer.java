@@ -96,30 +96,21 @@ public class InterfaceServer extends UnicastRemoteObject implements Interface
         
         if (DBConn!=null)
         {
-            
             try
             {
                 s = DBConn.createStatement();
                 res = s.executeQuery( "Select * from trees" );
-
                 String enviar = "";
-                
                 while (res.next())
                 {
                     msgString = res.getString(2) + " : " + res.getString(3) +
                             " : $"+ res.getString(5) + " : " + res.getString(4)
                             + " units in stock";
                     enviar = enviar +msgString+"\n";
-                    
-
                 }
-
                return enviar;
-                
             }catch (Exception e) {
                     e.printStackTrace();
-
-
             } // end try-catch
         } // if connect check
         return null;
@@ -134,30 +125,21 @@ public class InterfaceServer extends UnicastRemoteObject implements Interface
         
         if (DBConn!=null)
         {
-            
             try
             {
                 s = DBConn.createStatement();
                 res = s.executeQuery( "Select * from seeds" );
-
                 String enviar = "";
-                
                 while (res.next())
                 {
                     msgString = res.getString(2) + " : " + res.getString(3) +
                             " : $"+ res.getString(5) + " : " + res.getString(4)
                             + " units in stock";
                     enviar = enviar +msgString+"\n";
-                    
-
                 }
-
                return enviar;
-                
             }catch (Exception e) {
                     e.printStackTrace();
-
-
             } // end try-catch
         } // if connect check
         return null;
@@ -172,30 +154,21 @@ public class InterfaceServer extends UnicastRemoteObject implements Interface
         
         if (DBConn!=null)
         {
-            
             try
             {
                 s = DBConn.createStatement();
                 res = s.executeQuery( "Select * from shrubs" );
-
                 String enviar = "";
-                
                 while (res.next())
                 {
                     msgString = res.getString(2) + " : " + res.getString(3) +
                             " : $"+ res.getString(5) + " : " + res.getString(4)
                             + " units in stock";
                     enviar = enviar +msgString+"\n";
-                    
-
                 }
-
                return enviar;
-                
             }catch (Exception e) {
                     e.printStackTrace();
-
-
             } // end try-catch
         } // if connect check
         return null;
@@ -203,8 +176,6 @@ public class InterfaceServer extends UnicastRemoteObject implements Interface
     
     public Boolean ConnectToOrder()throws RemoteException{
         try{
-        
-
                 //load JDBC driver class for MySQL
         Class.forName( "com.mysql.jdbc.Driver" );
 
