@@ -49,6 +49,19 @@ public class Logger {
         }
     }
     
+    public void logLogout(String username){
+        try{
+            FileWriter fw = new FileWriter(filepathLogin, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.append("[Logout] User \'"+username+"\' logged out.\n");
+            bw.close();
+            fw.close();
+        } catch (IOException ex) {
+            System.out.println("Logger error:");
+            java.util.logging.Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void logOrder(String username, String orderID, String timestamp){
         try{
             FileWriter fw = new FileWriter(filepathOrder, true);

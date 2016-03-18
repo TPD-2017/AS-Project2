@@ -1,5 +1,6 @@
 /*Comment*/
 import java.sql.*;
+import java.util.Calendar;
 
  /******************************************************************************
  * File:NewJFrame.java
@@ -531,8 +532,23 @@ public class NewJFrame extends javax.swing.JFrame {
                 jTextField3.setText("");
                 jTextField4.setText("");
                 jTextField5.setText("");
+                
+                
+                String dateTimeStamp = null;
+                Calendar rightNow = Calendar.getInstance();
+
+            int TheHour = rightNow.get(rightNow.HOUR_OF_DAY);
+            int TheMinute = rightNow.get(rightNow.MINUTE);
+            int TheSecond = rightNow.get(rightNow.SECOND);
+            int TheDay = rightNow.get(rightNow.DAY_OF_WEEK);
+            int TheMonth = rightNow.get(rightNow.MONTH);
+            int TheYear = rightNow.get(rightNow.YEAR);
+
+            dateTimeStamp = TheMonth + "/" + TheDay + "/" + TheYear + " "
+                    + TheHour + ":" + TheMinute  + ":" + TheSecond;
+                
                 log = new Logger("shipinglog.txt");
-                log.logShip(updateOrderID.toString(), "Falta timeStamp");
+                log.logShip(updateOrderID.toString(), dateTimeStamp);
             } catch (Exception e) {
 
                 errString =  "\nProblem updating status:: " + e;
