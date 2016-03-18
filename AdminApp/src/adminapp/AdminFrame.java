@@ -5,6 +5,10 @@
  */
 package adminapp;
 
+import static adminapp.EncryptDecryptFile.decrypt;
+import static adminapp.EncryptDecryptFile.encrypt;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -120,22 +124,40 @@ public class AdminFrame extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // Shipping Log
         Runtime r = Runtime.getRuntime();
-        String shippingfile = "D:\\Eng. Informática\\Arquitectura de Software\\TP2\\TP2-CF\\ShippingApp1.8\\shippinglog.txt";
+        String shippingfile = "D:\\Eng. Informática\\Arquitectura de Software\\TP2\\TP2-CF\\RMIserver\\shippingdecrypted.txt";
+        
         try {
-            Process p = r.exec("notepad "+shippingfile);
-        } catch (IOException ex) {
-            Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
+            String key = "squirrel123"; // needs to be at least 8 characters for DES
+            FileInputStream fis2 = new FileInputStream("D:\\Eng. Informática\\Arquitectura de Software\\TP2\\TP2-CF\\ShippingApp1.8\\shippinglog.txt");
+            FileOutputStream fos2 = new FileOutputStream("D:\\Eng. Informática\\Arquitectura de Software\\TP2\\TP2-CF\\RMIserver\\shippingdecrypted.txt");
+            decrypt(key, fis2, fos2);
+            try {
+                Process p = r.exec("notepad "+shippingfile);
+            } catch (IOException ex) {
+                Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Throwable e) {
+		e.printStackTrace();
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // Login/Logout Log
         Runtime r = Runtime.getRuntime();
-        String loginlogoutfile = "D:\\Eng. Informática\\Arquitectura de Software\\TP2\\TP2-CF\\RMIserver\\loginlog.txt";
+        String loginlogoutfile = "D:\\Eng. Informática\\Arquitectura de Software\\TP2\\TP2-CF\\RMIserver\\loginlogoutdecrypted.txt";
+        
         try {
-            Process p = r.exec("notepad "+loginlogoutfile);
-        } catch (IOException ex) {
-            Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
+            String key = "squirrel123"; // needs to be at least 8 characters for DES
+            FileInputStream fis2 = new FileInputStream("D:\\Eng. Informática\\Arquitectura de Software\\TP2\\TP2-CF\\RMIserver\\loginlog.txt");
+            FileOutputStream fos2 = new FileOutputStream("D:\\Eng. Informática\\Arquitectura de Software\\TP2\\TP2-CF\\RMIserver\\loginlogoutdecrypted.txt");
+            decrypt(key, fis2, fos2);
+            try {
+                Process p = r.exec("notepad "+loginlogoutfile);
+            } catch (IOException ex) {
+                Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Throwable e) {
+		e.printStackTrace();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -148,11 +170,20 @@ public class AdminFrame extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // Orders Log
         Runtime r = Runtime.getRuntime();
-        String ordersfile = "D:\\Eng. Informática\\Arquitectura de Software\\TP2\\TP2-CF\\RMIserver\\orderlog.txt";
+        String ordersfile = "D:\\Eng. Informática\\Arquitectura de Software\\TP2\\TP2-CF\\RMIserver\\orderdecrypted.txt";
+        
         try {
-            Process p = r.exec("notepad "+ordersfile);
-        } catch (IOException ex) {
-            Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
+            String key = "squirrel123"; // needs to be at least 8 characters for DES
+            FileInputStream fis2 = new FileInputStream("D:\\Eng. Informática\\Arquitectura de Software\\TP2\\TP2-CF\\RMIserver\\orderlog.txt");
+            FileOutputStream fos2 = new FileOutputStream("D:\\Eng. Informática\\Arquitectura de Software\\TP2\\TP2-CF\\RMIserver\\orderdecrypted.txt");
+            decrypt(key, fis2, fos2);
+            try {
+                Process p = r.exec("notepad "+ordersfile);
+            } catch (IOException ex) {
+                Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Throwable e) {
+		e.printStackTrace();
         }
     }//GEN-LAST:event_jButton2ActionPerformed
     

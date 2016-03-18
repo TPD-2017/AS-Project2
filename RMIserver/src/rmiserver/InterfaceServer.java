@@ -24,12 +24,12 @@ public class InterfaceServer extends UnicastRemoteObject implements Interface
     
 	public InterfaceServer() throws RemoteException
 	{
-            log = new Logger("loginlog.txt", "orderlog.txt");
+            log = new Logger("loginlog2.txt", "orderlog2.txt");
             System.out.println("Novo server....");
 	}
 	public Boolean auth(String user, String password) throws RemoteException
 	{
-            System.out.println(user);
+            //System.out.println(user);
 		// Authentication/Login user
         Connection DBConn = null;           // MySQL connection handle
         DBConn = connecttoDB("orderinfo");

@@ -1,0 +1,4 @@
+[Login] User 'daniel' logged in.
+[Logout] User 'daniel' logged out.
+[Login] User 'daniel' logged in.
+[Logout] User 'daniel' logged out.
