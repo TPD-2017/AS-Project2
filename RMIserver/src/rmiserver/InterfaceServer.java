@@ -24,7 +24,7 @@ public class InterfaceServer extends UnicastRemoteObject implements Interface
     
 	public InterfaceServer() throws RemoteException
 	{
-            log = new Logger("login.txt", "order.txt");
+            log = new Logger("loginlog.txt", "orderlog.txt");
             System.out.println("Novo server....");
 	}
 	public Boolean auth(String user, String password) throws RemoteException
@@ -319,6 +319,6 @@ public class InterfaceServer extends UnicastRemoteObject implements Interface
             return false;
     }
     public void LogOut() throws RemoteException{
-        //log.
+        log.logLogout(userSave);
     }
 }

@@ -700,6 +700,18 @@ public class NewJFrame extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         this.setVisible(false);
+        
+        try{
+            Registry reg = LocateRegistry.getRegistry("localhost",1099);
+            Interface servico = (Interface)reg.lookup("Interface");
+            
+            //NAO SEI SE PODE SER STRING.. mas ja imprime
+            servico.LogOut();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+
         new AuthFrame().setVisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
 

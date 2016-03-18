@@ -1,3 +1,0 @@
-[Login] User 'daniel' logged in.
-[Login] User 'daniel' logged in.
-[Login] User 'daniel' logged in.
