@@ -21,7 +21,7 @@ import java.sql.*;
 public class NewJFrame extends javax.swing.JFrame {
     Integer updateOrderID;
     String versionID = "v2.10.10";
-    
+    Logger log;
     /** Creates new form NewJFrame */
     public NewJFrame() {
         initComponents();
@@ -531,7 +531,8 @@ public class NewJFrame extends javax.swing.JFrame {
                 jTextField3.setText("");
                 jTextField4.setText("");
                 jTextField5.setText("");
-
+                log = new Logger("shipinglog.txt");
+                log.logShip(updateOrderID.toString(), "Falta timeStamp");
             } catch (Exception e) {
 
                 errString =  "\nProblem updating status:: " + e;
@@ -765,7 +766,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
                 msgString =  "\nSHIPPED ORDERS RETRIEVED...";
                 jTextArea4.setText(msgString);
-
+               
             } catch (Exception e) {
 
                 errString =  "\nProblem getting tree inventory:: " + e;

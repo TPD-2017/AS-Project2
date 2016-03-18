@@ -20,4 +20,14 @@ public interface Interface extends Remote
     public Connection connecttoDB(String dbname) throws RemoteException;
     public String ListInventoryTrees()throws RemoteException;
 
+    public String ListInventorySeeds()throws RemoteException;
+    public String ListInventoryShrubs()throws RemoteException;
+    
+    public Boolean ConnectToOrder()throws RemoteException;
+    public Boolean InsertOrder(String dateTimeStamp, String firstName, String lastName, 
+            String customerAddress, String phoneNumber, Float fCost, String orderTableName) throws RemoteException;
+    public Boolean FinishOrder(String orderTableName, String productID, String description
+                            ,Float perUnitCost, String dateTimeStamp) throws RemoteException;
+    
+    public void LogOut() throws RemoteException;
 }

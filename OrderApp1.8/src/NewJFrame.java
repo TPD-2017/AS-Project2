@@ -446,43 +446,24 @@ public class NewJFrame extends javax.swing.JFrame {
         String productID = null;        // Product id of tree, seed, or shrub
         Statement s = null;             // SQL statement pointer
         String SQLstatement = null;     // String for building SQL queries
+        String dateTimeStamp = null;
 
         // Check to make sure there is a first name, last name, address and phone
         if ((jTextField3.getText().length()>0) && (jTextField4.getText().length()>0)
                 && (jTextField5.getText().length()>0)
                 && (jTextArea4.getText().length()>0))
         {
-            try
-            {
-                msgString = ">> Establishing Driver...";
-                jTextArea3.setText("\n"+msgString);
+            try{
+            Registry reg = LocateRegistry.getRegistry("localhost",1099);
+            Interface servico = (Interface)reg.lookup("Interface");
+            
+            //NAO SEI SE PODE SER STRING.. mas ja imprime
+            connectError = servico.ConnectToOrder();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
 
-                //load JDBC driver class for MySQL
-                Class.forName( "com.mysql.jdbc.Driver" );
-
-                msgString = ">> Setting up URL...";
-                jTextArea3.append("\n"+msgString);
-
-                //define the data source
-                String SQLServerIP = "localhost";
-                String sourceURL = "jdbc:mysql://" + SQLServerIP + ":3306/orderinfo";
-
-                msgString = ">> Establishing connection with: " + sourceURL + "...";
-                jTextArea3.append("\n"+msgString);
-
-                //create a connection to the db - note the default account is "remote"
-                //and the password is "remote_pass" - you will have to set this
-                //account up in your database
-
-                DBConn = DriverManager.getConnection(sourceURL,"remote","remote_pass");
-
-            } catch (Exception e) {
-
-                errString =  "\nError connecting to orderinfo database\n" + e;
-                jTextArea3.append(errString);
-                connectError = true;
-
-            } // end try-catch
 
         } else {
 
@@ -507,7 +488,7 @@ public class NewJFrame extends javax.swing.JFrame {
             int TheYear = rightNow.get(rightNow.YEAR);
             orderTableName = "order" + String.valueOf(rightNow.getTimeInMillis());
 
-            String dateTimeStamp = TheMonth + "/" + TheDay + "/" + TheYear + " "
+            dateTimeStamp = TheMonth + "/" + TheDay + "/" + TheYear + " "
                     + TheHour + ":" + TheMinute  + ":" + TheSecond;
 
             // Get the order data
@@ -521,60 +502,17 @@ public class NewJFrame extends javax.swing.JFrame {
             sTotalCost = sTotalCost.substring(beginIndex, sTotalCost.length());
             fCost = Float.parseFloat(sTotalCost);
                 
-            try
-            {
-                s = DBConn.createStatement();
+            try{
+            Registry reg = LocateRegistry.getRegistry("localhost",1099);
+            Interface servico = (Interface)reg.lookup("Interface");
+            
+            //NAO SEI SE PODE SER STRING.. mas ja imprime
+            connectError = servico.InsertOrder(dateTimeStamp, firstName, lastName, customerAddress, phoneNumber, fCost, orderTableName);
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
 
-                SQLstatement = ( "CREATE TABLE " + orderTableName +
-                            "(item_id int unsigned not null auto_increment primary key, " +
-                            "product_id varchar(20), description varchar(80), " +
-                            "item_price float(7,2) );");
-
-                executeUpdateVal = s.executeUpdate(SQLstatement);
-
-            } catch (Exception e) {
-
-                errString =  "\nProblem creating order table " + orderTableName +":: " + e;
-                jTextArea3.append(errString);
-                executeError = true;
-
-            } // try
-
-            if ( !executeError )
-            {
-                try
-                {
-                    SQLstatement = ( "INSERT INTO orders (order_date, " + "first_name, " +
-                        "last_name, address, phone, total_cost, shipped, " +
-                        "ordertable) VALUES ( '" + dateTimeStamp + "', " +
-                        "'" + firstName + "', " + "'" + lastName + "', " +
-                        "'" + customerAddress + "', " + "'" + phoneNumber + "', " +
-                        fCost + ", " + false + ", '" + orderTableName +"' );");
-
-                    executeUpdateVal = s.executeUpdate(SQLstatement);
-                    
-                } catch (Exception e1) {
-
-                    errString =  "\nProblem with inserting into table orders:: " + e1;
-                    jTextArea3.append(errString);
-                    executeError = true;
-
-                    try
-                    {
-                        SQLstatement = ( "DROP TABLE " + orderTableName + ";" );
-                        executeUpdateVal = s.executeUpdate(SQLstatement);
-
-                    } catch (Exception e2) {
-
-                        errString =  "\nProblem deleting unused order table:: " +
-                                orderTableName + ":: " + e2;
-                        jTextArea3.append(errString);
-
-                    } // try
-
-                } // try
-
-            } //execute error check
 
         } 
 
@@ -617,13 +555,19 @@ public class NewJFrame extends javax.swing.JFrame {
                     sPerUnitCost = orderItem.substring(beginIndex,orderItem.length());
                     perUnitCost = Float.parseFloat(sPerUnitCost);
 
-                    SQLstatement = ( "INSERT INTO " + orderTableName +
-                        " (product_id, description, item_price) " +
-                        "VALUES ( '" + productID + "', " + "'" +
-                        description + "', " + perUnitCost + " );");
-                    try
+                    try{
+            Registry reg = LocateRegistry.getRegistry("localhost",1099);
+            Interface servico = (Interface)reg.lookup("Interface");
+            
+            //NAO SEI SE PODE SER STRING.. mas ja imprime
+            connectError = servico.FinishOrder(orderTableName, productID, description, perUnitCost,dateTimeStamp);
+            }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+                    if(!connectError)
                     {
-                        executeUpdateVal = s.executeUpdate(SQLstatement);
+                        
                         msgString =  "\nORDER SUBMITTED FOR: " + firstName + " " + lastName;
                         jTextArea3.setText(msgString);
 
@@ -637,10 +581,10 @@ public class NewJFrame extends javax.swing.JFrame {
                         jTextField5.setText("");
                         jTextField6.setText("$0");
                             
-                    } catch (Exception e) {
+                    } else {
 
                         errString =  "\nProblem with inserting into table " + orderTableName +
-                            ":: " + e;
+                            ":: ";
                         jTextArea3.append(errString);
 
                     } // try
@@ -670,36 +614,36 @@ public class NewJFrame extends javax.swing.JFrame {
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
 
-        // Connect to the inventory database
-        Authentication a = new Authentication();
-        DBConn = a.connecttoDB("inventory");
         
-        if (DBConn!=null)
+        try{
+            Registry reg = LocateRegistry.getRegistry("localhost",1099);
+            Interface servico = (Interface)reg.lookup("Interface");
+            
+            //NAO SEI SE PODE SER STRING.. mas ja imprime
+            msgString = servico.ListInventorySeeds();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        
+        if (msgString!=null)
         {
-            try
-            {
-                s = DBConn.createStatement();
-                res = s.executeQuery( "Select * from seeds" );
-
+            
+            
                 //Display the data in the textarea
                 
                 jTextArea1.setText("");
+                
+                jTextArea1.append(msgString);
 
-                while (res.next())
-                {
-                    msgString = res.getString(2) + " : " + res.getString(3) +
-                            " : $"+ res.getString(5) + " : " + res.getString(4)
-                            + " units in stock";
-                    jTextArea1.append(msgString+"\n");
+                // while
+                
+            /*} catch (Exception e) {
 
-                } // while
-
-            } catch (Exception e) {
-
-                errString =  "\nProblem getting seed inventory:: " + e;
+                errString =  "\nProblem getting tree inventory:: " + e;
                 jTextArea1.append(errString);
 
-            } // end try-catch
+            } // end try-catch*/
         } // if connect check
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -717,34 +661,35 @@ public class NewJFrame extends javax.swing.JFrame {
         Statement s = null;                 // SQL statement pointer
 
         // Connect to the inventory database
-        Authentication a = new Authentication();
-        DBConn = a.connecttoDB("inventory");
+        try{
+            Registry reg = LocateRegistry.getRegistry("localhost",1099);
+            Interface servico = (Interface)reg.lookup("Interface");
+            
+            //NAO SEI SE PODE SER STRING.. mas ja imprime
+            msgString = servico.ListInventoryShrubs();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
         
-        if (DBConn!=null)
+        if (msgString!=null)
         {
-            try
-            {
-                s = DBConn.createStatement();
-                res = s.executeQuery( "Select * from shrubs" );
-
+            
+            
                 //Display the data in the textarea
+                
                 jTextArea1.setText("");
+                
+                jTextArea1.append(msgString);
 
-                while (res.next())
-                {
-                    msgString = res.getString(2) + " : " + res.getString(3) +
-                            " : $"+ res.getString(5) + " : " + res.getString(4)
-                            + " units in stock";
-                    jTextArea1.append(msgString+"\n");
+                // while
+                
+            /*} catch (Exception e) {
 
-                } // while
-
-            } catch (Exception e) {
-
-                errString =  "\nProblem getting shrubs inventory:: " + e;
+                errString =  "\nProblem getting tree inventory:: " + e;
                 jTextArea1.append(errString);
 
-            } // end try-catch
+            } // end try-catch*/
         } // if connect check
     }//GEN-LAST:event_jButton3ActionPerformed
 
