@@ -1,9 +1,12 @@
 
 import java.awt.event.WindowEvent;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import rmiserver.Interface;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -126,8 +129,26 @@ public class AuthFrame extends javax.swing.JFrame {
             for (int i = 0; i < byteData.length; i++) {
                 sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
             }
-            Authentication a = new Authentication();
-            Boolean b = a.auth(jTextField1.getText(), sb.toString());
+            
+            //Daniel
+            //Authentication a = new Authentication();
+            //Boolean b = a.auth(jTextField1.getText(), sb.toString());
+            
+            Boolean b = false;
+            jTextArea1.append("começar ligacao\n");
+            try{
+            Registry reg = LocateRegistry.getRegistry("localhost",1099);
+            Interface servico = (Interface)reg.lookup("Interface");
+            jTextArea1.append("ligado\n");
+            
+            
+            b = servico.auth(jTextField1.getText(), sb.toString());
+            jTextArea1.append("resultado " + b + "\n");
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+            jTextArea1.append("erro ligacao");
+        }
             
             if(b==true)
             {

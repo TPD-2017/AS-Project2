@@ -1,6 +1,9 @@
 
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.sql.*;
 import java.util.Calendar;
+import rmiserver.Interface;
 
 /**
  * File:NewJFrame.java
@@ -320,36 +323,39 @@ public class NewJFrame extends javax.swing.JFrame {
         ResultSet res = null;               // SQL query result set pointer
         Statement s = null;                 // SQL statement pointer
 
-        // Connect to the inventory database
-        Authentication a = new Authentication();
-        DBConn = a.connecttoDB("inventory");
+        //DANIEL Connect to the inventory database
+        //Authentication a = new Authentication();
+        //DBConn = a.connecttoDB("inventory");
         
-        if (DBConn!=null)
+        try{
+            Registry reg = LocateRegistry.getRegistry("localhost",1099);
+            Interface servico = (Interface)reg.lookup("Interface");
+            
+            //NAO SEI SE PODE SER STRING.. mas ja imprime
+            msgString = servico.ListInventoryTrees();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        
+        if (msgString!=null)
         {
-            try
-            {
-                s = DBConn.createStatement();
-                res = s.executeQuery( "Select * from trees" );
-
+            
+            
                 //Display the data in the textarea
                 
                 jTextArea1.setText("");
-
-                while (res.next())
-                {
-                    msgString = res.getString(2) + " : " + res.getString(3) +
-                            " : $"+ res.getString(5) + " : " + res.getString(4)
-                            + " units in stock";
-                    jTextArea1.append(msgString+"\n");
-
-                } // while
                 
-            } catch (Exception e) {
+                jTextArea1.append(msgString);
+
+                // while
+                
+            /*} catch (Exception e) {
 
                 errString =  "\nProblem getting tree inventory:: " + e;
                 jTextArea1.append(errString);
 
-            } // end try-catch
+            } // end try-catch*/
         } // if connect check
     }//GEN-LAST:event_jButton1ActionPerformed
 
